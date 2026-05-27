@@ -38,7 +38,7 @@ fun CarteirinhaScreen(modifier: Modifier = Modifier) {
         ) {
 
             PerfilAluno(
-                nome = "Rafael Costa",
+                nome = "Raí Felipe",
                 curso = "Desenvolvimento de Sistemas"
             )
             QrCode(
