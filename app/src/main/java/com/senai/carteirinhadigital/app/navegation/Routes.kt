@@ -1,7 +1,8 @@
 package com.senai.carteirinhadigital.app.navegation
 
-sealed class Routes(val route: String) {
+sealed class Routes (val route: String){
 
-     object Login : Routes("login")
-     object Carteirinha : Routes("carteirinha")
+     data object Login : Routes("login")
+     data object Carteirinha : Routes("carteirinha")
+
 }

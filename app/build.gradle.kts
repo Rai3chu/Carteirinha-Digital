@@ -58,6 +58,6 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.tooling)
     implementation("com.google.zxing:core:3.5.3")
     implementation("androidx.navigation:navigation-compose:$2.8.8")
-
+    implementation("androidx.compose.ui:ui-text-google-fonts:1.6.8") // Use the latest stable version matching your Compose version
 
 }
