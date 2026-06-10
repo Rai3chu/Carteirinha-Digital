@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.senai.carteirinhadigital.app.navegation.Routes
 
 @Composable
 fun LoginScreen(
@@ -78,7 +79,7 @@ fun LoginScreen(
 
             // Botão preenchido em Preto Puro com o texto interno em Amarelo Forte
             Button(
-                onClick = {},
+                onClick = {navController.navigate(Routes.Carteirinha.route)},
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.primary,   // Preto Puro

@@ -32,5 +32,14 @@ fun AppNavHost(
                 )
             }
         }
+
+        composable(Routes.Home.route) {
+            Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                HomeScreen(
+                    modifier = Modifier.padding(innerPadding)
+                )
+
+            }
+        }
     }
 }
