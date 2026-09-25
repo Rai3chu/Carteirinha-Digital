@@ -10,7 +10,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.senai.carteirinhadigital.app.navegation.Routes
+import com.senai.carteirinhadigital.app.navigation.Routes
 import com.senai.carteirinhadigital.feature.turmas.domain.model.Turmas
 
 private val Vinho = Color(0xFF8B0000)

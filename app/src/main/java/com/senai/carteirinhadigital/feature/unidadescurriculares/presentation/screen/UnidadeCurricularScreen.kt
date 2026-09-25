@@ -23,9 +23,9 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.senai.carteirinhadigital.R
 import com.senai.carteirinhadigital.feature.unidadescurriculares.data.dataSource
 import com.senai.carteirinhadigital.feature.unidadescurriculares.presentation.components.UnidadeCurricularCard
+import com.senaisp.carteirinhadigital.R
 
 // Definição das cores personalizadas
 val Vinho = Color(0xFF8B0000)

@@ -1,11 +1,10 @@
-package com.senai.carteirinhadigital.app.navegation
+package com.senai.carteirinhadigital.app.navigation
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -13,16 +12,14 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.senai.carteirinhadigital.app.session.SessionViewModel
 import com.senai.carteirinhadigital.feature.carteirinha.presentation.screen.CarteirinhaScreen
-import com.senai.carteirinhadigital.feature.home.presentation.screen.HomeProfScreen
 import com.senai.carteirinhadigital.feature.home.presentation.screen.HomeProfScreen
 import com.senai.carteirinhadigital.feature.home.presentation.screen.HomeScreen
 import com.senai.carteirinhadigital.feature.login.presentation.screen.LoginScreen
-import com.senai.carteirinhadigital.feature.turmas.domain.model.Turmas
 import com.senai.carteirinhadigital.feature.turmas.presetation.screen.TurmasScreen
 import com.senai.carteirinhadigital.feature.unidadescurriculares.presentation.screen.UcProfScreen
 import com.senai.carteirinhadigital.feature.unidadescurriculares.presentation.screen.UnidadeCurricularScreen
+import com.senaisp.carteirinhadigital.app.session.SessionViewModel
 
 @Composable
 fun AppNavHost(

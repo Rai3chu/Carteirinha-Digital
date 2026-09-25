@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
@@ -31,9 +30,9 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.senai.carteirinhadigital.R
-import com.senai.carteirinhadigital.app.navegation.Routes
+import com.senai.carteirinhadigital.app.navigation.Routes
 import com.senai.carteirinhadigital.core.desingsystem.theme.Montserrat
+import com.senaisp.carteirinhadigital.R
 
 @Composable
 fun LoginScreen(

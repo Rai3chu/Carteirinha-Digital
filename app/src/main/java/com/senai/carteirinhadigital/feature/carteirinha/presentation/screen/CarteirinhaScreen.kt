@@ -18,8 +18,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.rafaelcosta.myapplication.QrCode
-import com.senai.carteirinhadigital.R
 import com.senai.carteirinhadigital.feature.carteirinha.presentation.components.PerfilAluno
+import com.senaisp.carteirinhadigital.R
 
 @Composable
 fun CarteirinhaScreen(modifier: Modifier = Modifier) {

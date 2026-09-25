@@ -22,11 +22,10 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.senai.carteirinhadigital.R
 import com.senai.carteirinhadigital.feature.turmas.domain.model.Turmas
 import com.senai.carteirinhadigital.feature.turmas.presetation.components.TurmasCard
 import com.senai.carteirinhadigital.feature.turmas.data.dataSource
-
+import com.senaisp.carteirinhadigital.R
 
 
 @Composable

@@ -3,7 +3,7 @@ package com.senai.carteirinhadigital.app
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.rememberNavController
 import com.senai.carteirinhadigital.core.desingsystem.theme.CarteirinhaDigitalTheme
-import com.senai.carteirinhadigital.app.navegation.AppNavHost
+import com.senai.carteirinhadigital.app.navigation.AppNavHost
 
 @Composable
 fun App() {

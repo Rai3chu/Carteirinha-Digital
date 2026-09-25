@@ -3,8 +3,8 @@ package com.senai.carteirinhadigital.feature.login.presentation
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.senai.carteirinhadigital.feature.login.data.repository.FakeLoginRepositoryImpl
-import com.senai.carteirinhadigital.feature.login.data.repository.LoginRepository
+import com.senaisp.carteirinhadigital.feature.login.data.repository.FakeLoginRepositoryImpl
+import com.senaisp.carteirinhadigital.feature.login.data.repository.LoginRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

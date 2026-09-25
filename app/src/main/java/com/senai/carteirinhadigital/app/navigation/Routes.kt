@@ -1,4 +1,4 @@
-package com.senai.carteirinhadigital.app.navegation
+package com.senai.carteirinhadigital.app.navigation
 
 sealed class Routes (val route: String){
 

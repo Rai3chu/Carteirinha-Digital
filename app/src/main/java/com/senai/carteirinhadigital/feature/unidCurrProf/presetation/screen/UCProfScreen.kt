@@ -22,9 +22,9 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.senai.carteirinhadigital.R
 import com.senai.carteirinhadigital.feature.unidCurrProf.data.dataSource
 import com.senai.carteirinhadigital.feature.unidCurrProf.presetation.components.UcProfCard
+import com.senaisp.carteirinhadigital.R
 
 @Composable
 fun UcProfScreen(

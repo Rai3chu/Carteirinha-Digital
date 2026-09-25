@@ -1,19 +1,19 @@
-package com.senai.carteirinhadigital.app.session
+package com.senaisp.carteirinhadigital.app.session
 
+import androidx.lifecycle.ViewModel
 import com.senai.carteirinhadigital.feature.login.domain.model.UsuarioLogado
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-class SessionViewModel{
+class SessionViewModel: ViewModel() {
     private val _usuarioLogado = MutableStateFlow<UsuarioLogado?>(null)
     val usuarioLogado: StateFlow<UsuarioLogado?> = _usuarioLogado.asStateFlow()
 
-    fun setusuarioLogado(usuario: UsuarioLogado){
+    fun setUsuarioLogado(usuario: UsuarioLogado){
         _usuarioLogado.value = usuario
     }
     fun limparSession(){
         _usuarioLogado.value = null
     }
 }
-

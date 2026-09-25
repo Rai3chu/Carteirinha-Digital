@@ -1,0 +1,9 @@
+nvidia-dkms-595:
+  Installed: (none)
+  Candidate: 595.84-0ubuntu0.26.04.1
+  Version table:
+     595.84-0ubuntu0.26.04.1 500
+        500 http://archive.ubuntu.com/ubuntu resolute-updates/restricted amd64 Packages
+        500 http://security.ubuntu.com/ubuntu resolute-security/restricted amd64 Packages
+     595.58.03-0ubuntu2 500
+        500 http://archive.ubuntu.com/ubuntu resolute/restricted amd64 Packages
