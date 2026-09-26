@@ -16,4 +16,8 @@ class SessionViewModel: ViewModel() {
     fun limparSession(){
         _usuarioLogado.value = null
     }
+
+    fun salvarUsuario(usuario: UsuarioLogado) {
+        _usuarioLogado.value = usuario
+    }
 }

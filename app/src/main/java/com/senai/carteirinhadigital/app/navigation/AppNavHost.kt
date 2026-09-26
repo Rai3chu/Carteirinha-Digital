@@ -42,20 +42,25 @@ fun AppNavHost(
                     navController.navigate(Routes.HomeProf.route)
                 },
                 onLoginSucesso = { usuario ->
-                    // Redireciona o usuário após o login com sucesso
-                    navController.navigate(Routes.Carteirinha.route) {
+                    // 1. Atualiza a sessão com o usuário retornado pela API
+                    sessionViewModel.salvarUsuario(usuario) // <-- Ajuste o nome do método caso no seu ViewModel seja diferente (ex: updateUsuario, setUsuario)
+
+                    // 2. Navega para a Home ou Carteirinha
+                    navController.navigate(Routes.Home.route) {
                         popUpTo(Routes.Login.route) { inclusive = true }
                     }
                 }
             )
         }
-        composable(Routes.Carteirinha.route) {  //Carteirinha
-            val usuario = usuarioLogado
-            if (usuario==null){
+
+        composable(Routes.Home.route) {
+            if (usuarioLogado == null) {
                 LaunchedEffect(Unit) {
-                    navController.navigate(Routes.Login.route)
+                    navController.navigate(Routes.Login.route) {
+                        popUpTo(Routes.Home.route) { inclusive = true }
+                    }
                 }
-            }else {
+            } else {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     HomeScreen(
                         navController = navController,
@@ -63,20 +68,21 @@ fun AppNavHost(
                     )
                 }
             }
-            Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                CarteirinhaScreen(
-                    modifier = Modifier.padding(innerPadding)
-                )
-            }
         }
 
-        composable(Routes.Home.route) {   //Home
-            Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                HomeScreen(
-                    navController = navController,
-                    modifier = Modifier.padding(innerPadding)
-                )
-
+        composable(Routes.Carteirinha.route) {
+            if (usuarioLogado == null) {
+                LaunchedEffect(Unit) {
+                    navController.navigate(Routes.Login.route) {
+                        popUpTo(Routes.Carteirinha.route) { inclusive = true }
+                    }
+                }
+            } else {
+                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                    CarteirinhaScreen(
+                        modifier = Modifier.padding(innerPadding)
+                    )
+                }
             }
         }
 
@@ -92,9 +98,11 @@ fun AppNavHost(
         composable(Routes.HomeProf.route) {
             HomeProfScreen(navController = navController)
         }
+
         composable(Routes.Turmas.route) {
             TurmasScreen(navController = navController)
         }
+
         composable(Routes.UcProf.route) {
             UcProfScreen(navController = navController)
         }
