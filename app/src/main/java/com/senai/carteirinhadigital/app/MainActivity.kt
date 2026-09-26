@@ -11,7 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.senai.carteirinhadigital.core.desingsystem.theme.CarteirinhaDigitalTheme
 import com.senai.carteirinhadigital.feature.carteirinha.presentation.screen.CarteirinhaScreen
-import com.senai.carteirinhadigital.feature.login.presentation.screen.LoginScreen
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

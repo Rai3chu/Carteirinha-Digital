@@ -15,11 +15,12 @@ import androidx.navigation.compose.composable
 import com.senai.carteirinhadigital.feature.carteirinha.presentation.screen.CarteirinhaScreen
 import com.senai.carteirinhadigital.feature.home.presentation.screen.HomeProfScreen
 import com.senai.carteirinhadigital.feature.home.presentation.screen.HomeScreen
-import com.senai.carteirinhadigital.feature.login.presentation.screen.LoginScreen
+import com.senai.carteirinhadigital.feature.login.presentation.LoginViewModel
 import com.senai.carteirinhadigital.feature.turmas.presetation.screen.TurmasScreen
 import com.senai.carteirinhadigital.feature.unidadescurriculares.presentation.screen.UcProfScreen
 import com.senai.carteirinhadigital.feature.unidadescurriculares.presentation.screen.UnidadeCurricularScreen
 import com.senaisp.carteirinhadigital.app.session.SessionViewModel
+import com.senaisp.carteirinhadigital.feature.login.presentation.screen.LoginScreen
 
 @Composable
 fun AppNavHost(
@@ -32,9 +33,20 @@ fun AppNavHost(
         navController = navController,
         startDestination = Routes.Login.route
     ) {
-        composable(Routes.Login.route) {  //Login
+        composable(Routes.Login.route) {
+            val loginViewModel: LoginViewModel = viewModel()
+
             LoginScreen(
-                navController=navController
+                viewModel = loginViewModel,
+                onProfessorClick = {
+                    navController.navigate(Routes.HomeProf.route)
+                },
+                onLoginSucesso = { usuario ->
+                    // Redireciona o usuário após o login com sucesso
+                    navController.navigate(Routes.Carteirinha.route) {
+                        popUpTo(Routes.Login.route) { inclusive = true }
+                    }
+                }
             )
         }
         composable(Routes.Carteirinha.route) {  //Carteirinha

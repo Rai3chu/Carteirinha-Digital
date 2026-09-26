@@ -1,6 +1,5 @@
 package com.senai.carteirinhadigital.feature.login.presentation
 
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.senaisp.carteirinhadigital.feature.login.data.repository.FakeLoginRepositoryImpl
@@ -15,8 +14,8 @@ class LoginViewModel(
     private val repository: LoginRepository = FakeLoginRepositoryImpl()
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(LoginUIState())
-    val uiState: StateFlow<LoginUIState> = _uiState.asStateFlow()
+    private val _uiState = MutableStateFlow(LoginUiState())
+    val uiState: StateFlow<LoginUiState> = _uiState.asStateFlow()
 
     fun onEvent(event: LoginEvent) {
         when (event) {
