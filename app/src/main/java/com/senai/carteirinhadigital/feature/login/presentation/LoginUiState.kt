@@ -4,9 +4,10 @@ import com.senai.carteirinhadigital.feature.login.domain.model.UsuarioLogado
 
 data class LoginUiState(
     val usuario: String = "",
-    val senha : String = "",
-    val erroMessage: String? = null,
+    val senha: String = "",
     val isLoading: Boolean = false,
+    val errorMessage: String? = null,
+    val credentialError: Boolean = false,
     val usuarioLogado: UsuarioLogado? = null
 ) {
     val loginRealizado: Boolean

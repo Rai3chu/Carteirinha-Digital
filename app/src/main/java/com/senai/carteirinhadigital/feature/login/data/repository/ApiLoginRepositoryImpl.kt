@@ -1,6 +1,7 @@
     package com.senaisp.carteirinhadigital.feature.login.data.repository
 
     import com.senai.carteirinhadigital.feature.login.domain.model.UsuarioLogado
+    import com.senai.carteirinhadigital.feature.login.domain.repository.LoginRepository
     import com.senaisp.carteirinhadigital.feature.login.data.remote.dto.ErrorResponseDto
     import com.senaisp.carteirinhadigital.feature.login.data.remote.dto.LoginRequestDto
     import com.senaisp.carteirinhadigital.feature.login.data.remote.service.AuthApi
@@ -18,6 +19,7 @@
                 UsuarioLogado(
                     id = response.id,
                     nome = response.nome,
+                    matricula = response.matricula,
                     curso = response.curso,
                     turma = response.turma,
                     token = response.token

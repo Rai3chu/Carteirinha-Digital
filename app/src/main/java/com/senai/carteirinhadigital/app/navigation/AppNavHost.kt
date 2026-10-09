@@ -7,20 +7,24 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.rafaelcosta.carteirinhadigital2devest.feature.login.presentation.factory.LoginViewModelFactory
 import com.senai.carteirinhadigital.feature.carteirinha.presentation.screen.CarteirinhaScreen
 import com.senai.carteirinhadigital.feature.home.presentation.screen.HomeProfScreen
 import com.senai.carteirinhadigital.feature.home.presentation.screen.HomeScreen
 import com.senai.carteirinhadigital.feature.login.presentation.LoginViewModel
+import com.senai.carteirinhadigital.feature.login.presentation.screen.LoginScreen
 import com.senai.carteirinhadigital.feature.turmas.presetation.screen.TurmasScreen
 import com.senai.carteirinhadigital.feature.unidadescurriculares.presentation.screen.UcProfScreen
 import com.senai.carteirinhadigital.feature.unidadescurriculares.presentation.screen.UnidadeCurricularScreen
+import com.senaisp.carteirinhadigital.app.CarteirinhaApplication
 import com.senaisp.carteirinhadigital.app.session.SessionViewModel
-import com.senaisp.carteirinhadigital.feature.login.presentation.screen.LoginScreen
+
 
 @Composable
 fun AppNavHost(
@@ -34,18 +38,23 @@ fun AppNavHost(
         startDestination = Routes.Login.route
     ) {
         composable(Routes.Login.route) {
-            val loginViewModel: LoginViewModel = viewModel()
+            // 1. Obtém o container de dependências a partir da Application
+            val context = LocalContext.current
+            val appContainer = (context.applicationContext as CarteirinhaApplication).container
 
+            // 2. Cria o ViewModel utilizando a Factory
+            val viewModel: LoginViewModel = viewModel(
+                factory = LoginViewModelFactory(appContainer.loginRepository)
+            )
+
+            // 3. Passa o viewModel já instanciado para a tela
             LoginScreen(
-                viewModel = loginViewModel,
+                viewModel = viewModel,
                 onProfessorClick = {
                     navController.navigate(Routes.HomeProf.route)
                 },
                 onLoginSucesso = { usuario ->
-                    // 1. Atualiza a sessão com o usuário retornado pela API
-                    sessionViewModel.salvarUsuario(usuario) // <-- Ajuste o nome do método caso no seu ViewModel seja diferente (ex: updateUsuario, setUsuario)
-
-                    // 2. Navega para a Home ou Carteirinha
+                    sessionViewModel.salvarUsuario(usuario)
                     navController.navigate(Routes.Home.route) {
                         popUpTo(Routes.Login.route) { inclusive = true }
                     }

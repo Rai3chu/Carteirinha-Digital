@@ -1,4 +1,4 @@
-package com.senaisp.carteirinhadigital.feature.login.presentation.screen
+package com.senai.carteirinhadigital.feature.login.presentation.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -37,6 +37,7 @@ import com.senai.carteirinhadigital.feature.login.domain.model.UsuarioLogado
 import com.senai.carteirinhadigital.feature.login.presentation.LoginEvent
 import com.senai.carteirinhadigital.feature.login.presentation.LoginViewModel
 import com.senaisp.carteirinhadigital.R
+import com.senai.carteirinhadigital.feature.login.presentation.LoginUiState
 
 @Composable
 fun LoginScreen(
@@ -127,7 +128,7 @@ fun LoginScreen(
             )
 
             // Mensagem de Erro
-            uiState.erroMessage?.let { error ->
+            uiState.errorMessage?.let { error ->
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     text = error,
