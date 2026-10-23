@@ -1,119 +1,121 @@
 package com.senai.carteirinhadigital.app.navigation
 
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.compose.runtime.remember
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import com.rafaelcosta.carteirinhadigital2devest.feature.login.presentation.factory.LoginViewModelFactory
-import com.senai.carteirinhadigital.feature.carteirinha.presentation.screen.CarteirinhaScreen
-import com.senai.carteirinhadigital.feature.home.presentation.screen.HomeProfScreen
-import com.senai.carteirinhadigital.feature.home.presentation.screen.HomeScreen
-import com.senai.carteirinhadigital.feature.login.presentation.LoginViewModel
-import com.senai.carteirinhadigital.feature.login.presentation.screen.LoginScreen
-import com.senai.carteirinhadigital.feature.turmas.presetation.screen.TurmasScreen
-import com.senai.carteirinhadigital.feature.unidadescurriculares.presentation.screen.UcProfScreen
-import com.senai.carteirinhadigital.feature.unidadescurriculares.presentation.screen.UnidadeCurricularScreen
-import com.senaisp.carteirinhadigital.app.CarteirinhaApplication
+import com.senai.carteirinhadigital.app.di.AppContainer
+import com.senai.carteirinhadigital.app.navigation.aluno.alunoNavGraph
+import com.senai.carteirinhadigital.app.navigation.auth.authNavGraph
+import com.senai.carteirinhadigital.app.navigation.professor.professorNavGraph
+import com.senai.carteirinhadigital.app.session.SessionViewModelFactory
+import com.senai.carteirinhadigital.feature.login.domain.model.PerfilAcesso
 import com.senaisp.carteirinhadigital.app.session.SessionViewModel
-
 
 @Composable
 fun AppNavHost(
     navController: NavHostController,
-    sessionViewModel: SessionViewModel = viewModel()
+    darkTheme: Boolean,
+    onDarkThemeChange: (Boolean) -> Unit,
+    container: AppContainer
 ) {
-    val usuarioLogado by sessionViewModel.usuarioLogado.collectAsStateWithLifecycle()
+
+    val sessionFactory = remember(container.sessionTokenStore) {
+        SessionViewModelFactory(
+            sessionTokenStore = container.sessionTokenStore
+        )
+    }
+
+    val sessionViewModel: SessionViewModel = viewModel(
+        factory = sessionFactory
+    )
+
+    fun graphFor(perfil: PerfilAcesso): String {
+        return when (perfil) {
+            PerfilAcesso.ALUNO -> GraphRoutes.ALUNO
+            PerfilAcesso.PROFESSOR -> GraphRoutes.PROFESSOR
+        }
+    }
+
+    fun replaceGraph(
+        currentGraph: String,
+        destinationGraph: String
+    ) {
+
+        navController.navigate(destinationGraph) {
+            popUpTo(currentGraph) {
+                inclusive = true
+            }
+            launchSingleTop = true
+        }
+    }
 
     NavHost(
         navController = navController,
-        startDestination = Routes.Login.route
+        startDestination = GraphRoutes.AUTH
     ) {
-        composable(Routes.Login.route) {
-            // 1. Obtém o container de dependências a partir da Application
-            val context = LocalContext.current
-            val appContainer = (context.applicationContext as CarteirinhaApplication).container
-
-            // 2. Cria o ViewModel utilizando a Factory
-            val viewModel: LoginViewModel = viewModel(
-                factory = LoginViewModelFactory(appContainer.loginRepository)
-            )
-
-            // 3. Passa o viewModel já instanciado para a tela
-            LoginScreen(
-                viewModel = viewModel,
-                onProfessorClick = {
-                    navController.navigate(Routes.HomeProf.route)
-                },
-                onLoginSucesso = { usuario ->
-                    sessionViewModel.salvarUsuario(usuario)
-                    navController.navigate(Routes.Home.route) {
-                        popUpTo(Routes.Login.route) { inclusive = true }
-                    }
-                }
-            )
-        }
-
-        composable(Routes.Home.route) {
-            if (usuarioLogado == null) {
-                LaunchedEffect(Unit) {
-                    navController.navigate(Routes.Login.route) {
-                        popUpTo(Routes.Home.route) { inclusive = true }
-                    }
-                }
-            } else {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    HomeScreen(
-                        navController = navController,
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
-            }
-        }
-
-        composable(Routes.Carteirinha.route) {
-            if (usuarioLogado == null) {
-                LaunchedEffect(Unit) {
-                    navController.navigate(Routes.Login.route) {
-                        popUpTo(Routes.Carteirinha.route) { inclusive = true }
-                    }
-                }
-            } else {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    CarteirinhaScreen(
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
-            }
-        }
-
-        composable(Routes.UnidadesCurriculares.route) {
-            Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                UnidadeCurricularScreen(
-                    navController = navController,
-                    modifier = Modifier.padding(innerPadding)
+        authNavGraph(
+            loginRepository = container.loginRepository,
+            onLoginSucesso = { usuario ->
+                sessionViewModel.setUsuarioLogado(usuario)
+                replaceGraph(
+                    currentGraph = GraphRoutes.AUTH,
+                    destinationGraph = graphFor(usuario.perfil)
                 )
             }
-        }
+        )
 
-        composable(Routes.HomeProf.route) {
-            HomeProfScreen(navController = navController)
-        }
+        alunoNavGraph(
+            navController = navController,
+            usuarioLogadoFlow = sessionViewModel.usuarioLogado,
+            unidadeCurricularRepository = container.unidadeCurricularRepository,
+            darkTheme = darkTheme,
+            onDarkThemeChange = onDarkThemeChange,
+            onLogout = {
+                sessionViewModel.limparSessao()
+                replaceGraph(
+                    currentGraph = GraphRoutes.ALUNO,
+                    destinationGraph = GraphRoutes.AUTH
+                )
+            },
+            onSessaoAusente = {
+                replaceGraph(
+                    currentGraph = GraphRoutes.ALUNO,
+                    destinationGraph = GraphRoutes.AUTH
+                )
+            },
+            onPerfilInvalido = { perfil ->
+                replaceGraph(
+                    currentGraph = GraphRoutes.ALUNO,
+                    destinationGraph = graphFor(perfil)
+                )
+            }
+        )
 
-        composable(Routes.Turmas.route) {
-            TurmasScreen(navController = navController)
-        }
-
-        composable(Routes.UcProf.route) {
-            UcProfScreen(navController = navController)
-        }
+        professorNavGraph(
+            usuarioLogadoFlow = sessionViewModel.usuarioLogado,
+            darkTheme = darkTheme,
+            onDarkThemeChange = onDarkThemeChange,
+            onLogout = {
+                sessionViewModel.limparSessao()
+                replaceGraph(
+                    currentGraph = GraphRoutes.PROFESSOR,
+                    destinationGraph = GraphRoutes.AUTH
+                )
+            },
+            onSessaoAusente = {
+                replaceGraph(
+                    currentGraph = GraphRoutes.PROFESSOR,
+                    destinationGraph = GraphRoutes.AUTH
+                )
+            },
+            onPerfilInvalido = { perfil ->
+                replaceGraph(
+                    currentGraph = GraphRoutes.PROFESSOR,
+                    destinationGraph = graphFor(perfil)
+                )
+            }
+        )
     }
 }

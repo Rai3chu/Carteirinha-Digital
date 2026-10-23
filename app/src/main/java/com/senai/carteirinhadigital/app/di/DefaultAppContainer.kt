@@ -2,13 +2,11 @@ package com.senai.carteirinhadigital.app.di
 
 import com.senai.carteirinhadigital.core.auth.SessionTokenStore
 import com.senai.carteirinhadigital.feature.login.domain.repository.LoginRepository
-import com.senaisp.carteirinhadigital.app.di.AppContainer
 import com.senaisp.carteirinhadigital.core.network.NetworkClient
 import com.senaisp.carteirinhadigital.feature.login.data.remote.service.AuthApi
 import com.senaisp.carteirinhadigital.feature.login.data.repository.ApiLoginRepositoryImpl
 import com.senaisp.carteirinhadigital.feature.login.data.repository.FakeAuthRepository
 import com.senaisp.carteirinhadigital.feature.unidadecurriculares.data.remote.service.UnidadeCurricularApi
-import com.senaisp.carteirinhadigital.feature.unidadecurriculares.data.repository.ApiUnidadeCurricularRepositoryImpl
 import com.senaisp.carteirinhadigital.feature.unidadecurriculares.domain.repository.UnidadeCurricularRepository
 
 
@@ -25,9 +23,9 @@ class DefaultAppContainer : AppContainer {
             AuthApi::class.java
         )
     }
-    private val unidadeCurricularApi : UnidadeCurricularApi by lazy {
+    private val unidadeCurricularApi : com.senaisp.carteirinhadigital.feature.unidadecurriculares.data.remote.service.UnidadeCurricularApi by lazy {
         networkClient.createAuthenticated(
-            UnidadeCurricularApi::class.java
+            _root_ide_package_.com.senaisp.carteirinhadigital.feature.unidadecurriculares.data.remote.service.UnidadeCurricularApi::class.java
         )
     }
     override val loginRepository : LoginRepository by lazy {
@@ -39,8 +37,8 @@ class DefaultAppContainer : AppContainer {
             )
         }
     }
-    override val unidadeCurricularRepository : UnidadeCurricularRepository by lazy {
-        ApiUnidadeCurricularRepositoryImpl(
+    override val unidadeCurricularRepository : com.senaisp.carteirinhadigital.feature.unidadecurriculares.domain.repository.UnidadeCurricularRepository by lazy {
+        _root_ide_package_.com.senaisp.carteirinhadigital.feature.unidadecurriculares.data.repository.ApiUnidadeCurricularRepositoryImpl(
             api = unidadeCurricularApi
         )
     }

@@ -36,8 +36,8 @@ import com.senai.carteirinhadigital.core.desingsystem.theme.Montserrat
 import com.senai.carteirinhadigital.feature.login.domain.model.UsuarioLogado
 import com.senai.carteirinhadigital.feature.login.presentation.LoginEvent
 import com.senai.carteirinhadigital.feature.login.presentation.LoginViewModel
-import com.senaisp.carteirinhadigital.R
 import com.senai.carteirinhadigital.feature.login.presentation.LoginUiState
+import com.senaisp.carteirinhadigital.R
 
 @Composable
 fun LoginScreen(
@@ -55,7 +55,22 @@ fun LoginScreen(
         }
     }
 
-    Box(modifier = modifier.fillMaxSize()) {
+    LoginContent(
+        uiState = uiState,
+        onEvent = viewModel::onEvent,
+        onProfessorClick = onProfessorClick,
+        modifier = modifier.fillMaxSize()
+    )
+}
+
+@Composable
+fun LoginContent(
+    uiState: LoginUiState,
+    onEvent: (LoginEvent) -> Unit,
+    onProfessorClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Box(modifier = modifier) {
         // Imagem de Fundo
         Image(
             painter = painterResource(id = R.drawable.redbg),
@@ -86,7 +101,7 @@ fun LoginScreen(
             OutlinedTextField(
                 value = uiState.usuario,
                 onValueChange = { value ->
-                    viewModel.onEvent(LoginEvent.OnUsuarioChange(value))
+                    onEvent(LoginEvent.OnUsuarioChange(value))
                 },
                 modifier = Modifier.fillMaxWidth(),
                 label = { Text(text = "Email") },
@@ -109,7 +124,7 @@ fun LoginScreen(
             OutlinedTextField(
                 value = uiState.senha,
                 onValueChange = { value ->
-                    viewModel.onEvent(LoginEvent.OnSenhaChange(value))
+                    onEvent(LoginEvent.OnSenhaChange(value))
                 },
                 modifier = Modifier.fillMaxWidth(),
                 label = { Text(text = "Senha") },
@@ -142,7 +157,7 @@ fun LoginScreen(
 
             // Botão Entrar
             Button(
-                onClick = { viewModel.onEvent(LoginEvent.OnEntrarClick) },
+                onClick = { onEvent(LoginEvent.OnEntrarClick) },
                 enabled = !uiState.isLoading,
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(

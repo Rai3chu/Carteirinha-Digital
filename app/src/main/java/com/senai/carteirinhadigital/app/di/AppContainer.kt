@@ -1,4 +1,4 @@
-package com.senaisp.carteirinhadigital.app.di
+package com.senai.carteirinhadigital.app.di
 
 import com.senai.carteirinhadigital.core.auth.SessionTokenStore
 import com.senai.carteirinhadigital.feature.login.domain.repository.LoginRepository
@@ -10,5 +10,5 @@ interface AppContainer {
 
     val loginRepository : LoginRepository
 
-    val unidadeCurricularRepository : UnidadeCurricularRepository
+    val unidadeCurricularRepository : com.senaisp.carteirinhadigital.feature.unidadecurriculares.domain.repository.UnidadeCurricularRepository
 }
