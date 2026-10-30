@@ -1,4 +1,4 @@
-package com.senaisp.carteirinhadigital.app.session
+package com.senai.carteirinhadigital.app.session
 
 import androidx.lifecycle.ViewModel
 import com.senai.carteirinhadigital.core.auth.SessionTokenStore
@@ -10,8 +10,9 @@ import kotlinx.coroutines.flow.asStateFlow
 class SessionViewModel(
     private val sessionTokenStore: SessionTokenStore
 ) : ViewModel() {
-    private val _usuarioLogado =MutableStateFlow<UsuarioLogado?>(null)
-    val usuarioLogado : StateFlow<UsuarioLogado?> = _usuarioLogado.asStateFlow()
+    private val _usuarioLogado = MutableStateFlow<UsuarioLogado?>(null)
+    val usuarioLogado: StateFlow<UsuarioLogado?> = _usuarioLogado.asStateFlow()
+
     fun setUsuarioLogado(usuario: UsuarioLogado) {
         sessionTokenStore.salvar(usuario.token)
         _usuarioLogado.value = usuario

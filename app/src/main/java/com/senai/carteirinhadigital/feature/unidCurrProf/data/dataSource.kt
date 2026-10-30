@@ -1,7 +1,6 @@
 package com.senai.carteirinhadigital.feature.unidCurrProf.data
 
 import com.senai.carteirinhadigital.feature.unidCurrProf.domain.model.UcProf
-import com.senai.carteirinhadigital.feature.unidadescurriculares.domain.model.UnidadeCurricular
 
 fun dataSource (): List<UcProf> {
     return listOf(

@@ -63,7 +63,7 @@ fun NavGraphBuilder.alunoNavGraph(
                         onUnidadesCurricularesClick = {
                             navController.navigate(AlunoRoutes.UNIDADES_CURRICULARES)
                         },
-                        onSairClick = onLogout, // Nome correto ajustado para 'onSairClick'
+                        onSairClick = onLogout,
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(innerPadding)

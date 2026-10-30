@@ -6,7 +6,6 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import com.rafaelcosta.carteirinhadigital2devest.app.navigation.professor.ProfessorRoutes
 import com.senai.carteirinhadigital.app.navigation.GraphRoutes
 import com.senai.carteirinhadigital.app.navigation.ProfileGuard
 import com.senai.carteirinhadigital.app.ui.AppShell
@@ -25,6 +24,7 @@ fun NavGraphBuilder.professorNavGraph(
 ) {
     navigation(startDestination = ProfessorRoutes.HOME, route = GraphRoutes.PROFESSOR) {
         composable(route = ProfessorRoutes.HOME) {
+            // O seu ProfileGuard original já espera o Flow diretamente
             ProfileGuard(
                 usuarioFlow = usuarioLogadoFlow,
                 perfilEsperado = PerfilAcesso.PROFESSOR,
@@ -41,6 +41,7 @@ fun NavGraphBuilder.professorNavGraph(
                     onLogout = onLogout
                 ) { innerPadding ->
                     HomeProfScreen(
+                        // Os parâmetros originais exigidos pela sua tela
                         usuarioLogado = usuario,
                         onTurmasClick = {},
                         onUnidadesCurricularesClick = {},

@@ -14,7 +14,11 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,22 +26,29 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.senai.carteirinhadigital.feature.turmas.domain.model.Turmas
+import com.senai.carteirinhadigital.feature.aluno.unidadescurriculares.data.dataSource
 import com.senai.carteirinhadigital.feature.turmas.presetation.components.TurmasCard
-import com.senai.carteirinhadigital.feature.turmas.data.dataSource
+import com.senai.carteirinhadigital.feature.turmas.domain.model.Turma
+import com.senai.carteirinhadigital.feature.turmas.presetation.TurmaViewModel
 import com.senaisp.carteirinhadigital.R
+import androidx.compose.runtime.getValue
+import com.senai.carteirinhadigital.feature.turmas.presetation.components.TurmasCard
 
 
 @Composable
 fun TurmasScreen(
-    modifier: Modifier = Modifier,
-    navController: NavHostController
+    viewModel: TurmaViewModel,
+    navController: NavHostController,
+    modifier: Modifier = Modifier
 ) {
-    // 1. Instancia a lista do dataSource de turmas
-    val listaTurmas = dataSource()
+    val uiState by viewModel.uiState.collectAsState()
     val headerHeight = 90.dp
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    LaunchedEffect(Unit) {
+        viewModel.carregar()
+    }
+
+    Box(modifier = modifier.fillMaxSize()) {
         Image(
             painter = painterResource(id = R.drawable.blackbg),
             contentDescription = "Fundo da Tela",
@@ -45,51 +56,34 @@ fun TurmasScreen(
             contentScale = ContentScale.Crop
         )
 
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(
-                top = headerHeight + 16.dp,
-                bottom = 20.dp,
-                start = 20.dp,
-                end = 20.dp
-            ),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-
-            items(listaTurmas) { turma ->
-                TurmasCard(
-                    turmas = turma,
-                    navController = navController
+        when {
+            uiState.isLoading -> {
+                CircularProgressIndicator(
+                    modifier = Modifier.align(Alignment.Center)
                 )
             }
-        }
-
-
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(headerHeight)
-                .padding(horizontal = 20.dp, vertical = 16.dp),
-            contentAlignment = Alignment.CenterStart
-        ) {
-
-            Button(
-                onClick = {
-                    navController.popBackStack()
-                },
-                modifier = Modifier.size(56.dp),
-                shape = RoundedCornerShape(12.dp),
-                contentPadding = PaddingValues(0.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.Transparent
+            uiState.errorMessage != null -> {
+                Text(
+                    text = uiState.errorMessage ?: "Erro desconhecido",
+                    modifier = Modifier.align(Alignment.Center)
                 )
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.voltar),
-                    contentDescription = "Voltar",
-                    modifier = Modifier.fillMaxSize(),
-                    contentScale = ContentScale.Fit
-                )
+            }
+            else -> {
+                LazyColumn(
+                    contentPadding = PaddingValues(
+                        top = headerHeight + 16.dp,
+                        bottom = 20.dp,
+                        start = 20.dp,
+                        end = 20.dp
+                    ),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    items(items = uiState.turmas) { turma ->
+                        TurmasCard(
+                            turma = turma
+                        )
+                    }
+                }
             }
         }
     }

@@ -1,9 +1,12 @@
 package com.senai.carteirinhadigital.feature.turmas.domain.model
 
-data class Turmas (
+data class Turma(
     val id: String,
-    val nome : String,
-    val alunos : Int,
-    val idUc : String
-
+    val codigo: String,
+    val curso: String,
+    val semestre: String,
+    val quantidadeAlunos: Int,
+    val diasSemana: List<String>,
+    val horarioInicio: String,
+    val horarioFim: String
 )

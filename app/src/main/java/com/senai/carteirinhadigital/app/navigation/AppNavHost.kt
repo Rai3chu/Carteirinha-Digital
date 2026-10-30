@@ -1,5 +1,7 @@
 package com.senai.carteirinhadigital.app.navigation
 
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.LocalActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -9,9 +11,9 @@ import com.senai.carteirinhadigital.app.di.AppContainer
 import com.senai.carteirinhadigital.app.navigation.aluno.alunoNavGraph
 import com.senai.carteirinhadigital.app.navigation.auth.authNavGraph
 import com.senai.carteirinhadigital.app.navigation.professor.professorNavGraph
-import com.senai.carteirinhadigital.app.session.SessionViewModelFactory
 import com.senai.carteirinhadigital.feature.login.domain.model.PerfilAcesso
-import com.senaisp.carteirinhadigital.app.session.SessionViewModel
+import com.senai.carteirinhadigital.app.session.SessionViewModel
+import com.senai.carteirinhadigital.app.session.SessionViewModelFactory
 
 @Composable
 fun AppNavHost(
@@ -27,7 +29,11 @@ fun AppNavHost(
         )
     }
 
+    val activity = LocalActivity.current as ComponentActivity
+
+
     val sessionViewModel: SessionViewModel = viewModel(
+        viewModelStoreOwner = activity,
         factory = sessionFactory
     )
 
@@ -58,6 +64,7 @@ fun AppNavHost(
         authNavGraph(
             loginRepository = container.loginRepository,
             onLoginSucesso = { usuario ->
+                // Agora esta chamada afeta o ViewModel global observado por toda a aplicação
                 sessionViewModel.setUsuarioLogado(usuario)
                 replaceGraph(
                     currentGraph = GraphRoutes.AUTH,

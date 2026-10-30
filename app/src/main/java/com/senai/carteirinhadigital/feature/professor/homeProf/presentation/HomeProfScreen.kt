@@ -25,7 +25,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.senai.carteirinhadigital.core.desingsystem.component.NavigationButton
@@ -37,13 +36,13 @@ fun HomeProfScreen(
     usuarioLogado: UsuarioLogado,
     onTurmasClick: () -> Unit,
     onUnidadesCurricularesClick: () -> Unit,
-    onLogoutClick: () -> Unit, // Callback adicionado para o botão de deslogar
+    onLogoutClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Box(
         modifier = modifier.fillMaxSize()
     ) {
-        // Imagem de Fundo mantida do design original
+        // Imagem de Fundo
         Image(
             painter = painterResource(id = R.drawable.blackbg),
             contentDescription = "Fundo",
@@ -59,17 +58,15 @@ fun HomeProfScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            // Título dinâmico mantendo o design (cor branca)
             Text(
                 text = "Olá, ${usuarioLogado.nome}",
                 color = Color.White,
-                fontSize = 36.sp, // Ajustado para caber o nome dinâmico
+                fontSize = 36.sp,
                 fontWeight = FontWeight.Bold
             )
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            // Card de informações do professor com leve transparência
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 colors = CardDefaults.cardColors(
@@ -93,7 +90,6 @@ fun HomeProfScreen(
 
             Spacer(modifier = Modifier.height(40.dp))
 
-            // Botões de navegação organizados
             Column(
                 modifier = Modifier.fillMaxWidth(),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
@@ -112,7 +108,7 @@ fun HomeProfScreen(
             }
         }
 
-        // Botão Quadrado de Logout (Canto Inferior Esquerdo) adaptado para State Hoisting
+        // Botão de Logout
         Button(
             onClick = onLogoutClick,
             modifier = Modifier
@@ -134,4 +130,3 @@ fun HomeProfScreen(
         }
     }
 }
-

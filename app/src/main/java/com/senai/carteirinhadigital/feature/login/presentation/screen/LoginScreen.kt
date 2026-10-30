@@ -180,21 +180,8 @@ fun LoginContent(
                 }
             }
 
-            // Botão Entrar como Professor
-            TextButton(
-                onClick = onProfessorClick,
-                modifier = Modifier.padding(top = 8.dp)
-            ) {
-                Text(
-                    text = "Entrar como professor",
-                    color = Color.White,
-                    fontFamily = Montserrat,
-                    fontSize = 14.sp
-                )
-            }
         }
 
-        // Logo SENAI no fundo
         Image(
             painter = painterResource(id = R.drawable.senai),
             contentDescription = "Logo SENAI",

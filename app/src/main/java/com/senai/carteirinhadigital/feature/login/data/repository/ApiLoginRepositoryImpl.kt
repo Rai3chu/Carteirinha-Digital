@@ -1,55 +1,80 @@
-    package com.senaisp.carteirinhadigital.feature.login.data.repository
+package com.senai.carteirinhadigital.feature.login.data.repository
 
-    import com.senai.carteirinhadigital.feature.login.domain.model.UsuarioLogado
-    import com.senai.carteirinhadigital.feature.login.domain.repository.LoginRepository
-    import com.senaisp.carteirinhadigital.feature.login.data.remote.dto.ErrorResponseDto
-    import com.senaisp.carteirinhadigital.feature.login.data.remote.dto.LoginRequestDto
-    import com.senaisp.carteirinhadigital.feature.login.data.remote.service.AuthApi
-    import kotlinx.serialization.json.Json
-    import retrofit2.HttpException
-    import java.io.IOException
+import com.senai.carteirinhadigital.feature.login.domain.model.PerfilAcesso
+import com.senai.carteirinhadigital.feature.login.domain.model.UsuarioLogado
+import com.senai.carteirinhadigital.feature.login.domain.repository.LoginRepository
+import com.senaisp.carteirinhadigital.feature.login.data.remote.dto.ErrorResponseDto
+import com.senaisp.carteirinhadigital.feature.login.data.remote.dto.LoginRequestDto
+import com.senaisp.carteirinhadigital.feature.login.data.remote.service.AuthApi
+import kotlinx.serialization.json.Json
+import retrofit2.HttpException
+import java.io.IOException
 
-    class ApiLoginRepositoryImpl(
-        private val api: AuthApi
-    ) : LoginRepository {
+class ApiLoginRepositoryImpl(
+    private val api: AuthApi
+) : LoginRepository {
 
-        override suspend fun login(usuario: String, senha: String): Result<UsuarioLogado> {
-            return runCatching {
-                val response = api.login(LoginRequestDto(login = usuario, senha = senha))
-                UsuarioLogado(
-                    id = response.id,
-                    nome = response.nome,
-                    matricula = response.matricula,
-                    curso = response.curso,
-                    turma = response.turma,
-                    token = response.token
+    override suspend fun login(
+        login: String,
+        senha: String
+    ): Result<UsuarioLogado> {
+        return runCatching {
+            val response = api.login(
+                LoginRequestDto(
+                    login = login,
+                    senha = senha
                 )
-            }.recoverCatching { throwable ->
-                throw mapToDomainError(throwable)
-            }
-        }
+            )
 
-        private fun mapToDomainError(throwable: Throwable): Throwable {
-            return when (throwable) {
-                is HttpException -> mapHttpException(throwable)
-                is IOException -> IllegalStateException(
-                    "Não foi possível conectar à API local. Verifique se ela está rodando."
-                )
-                else -> IllegalStateException(throwable.message ?: "Erro ao fazer login.")
-            }
-        }
-
-        private fun mapHttpException(exception: HttpException): Throwable {
-            if (exception.code() == 401) {
-                return IllegalArgumentException("Login ou senha inválidos")
-            }
-
-            val messageFromBody = exception.response()?.errorBody()?.string()?.let { body ->
-                runCatching {
-                    Json { ignoreUnknownKeys = true }.decodeFromString<ErrorResponseDto>(body).message
-                }.getOrNull()
-            }
-
-            return IllegalStateException(messageFromBody ?: "Erro no servidor (${exception.code()}).")
+            UsuarioLogado(
+                id = response.id,
+                nome = response.nome,
+                matricula = response.matricula,
+                perfil = PerfilAcesso.fromApi(response.perfil),
+                curso = response.curso,
+                turma = response.turma,
+                token = response.token
+            )
+        }.recoverCatching { throwable ->
+            throw mapToDomainError(throwable)
         }
     }
+
+    private fun mapToDomainError(throwable: Throwable): Throwable {
+        return when (throwable) {
+            is HttpException -> mapHttpException(throwable)
+            is IOException -> IllegalStateException(
+                "Não foi possível conectar à API local. Verifique se ela está rodando."
+            )
+            else -> IllegalStateException(
+                throwable.message ?: "Erro ao fazer login."
+            )
+        }
+    }
+
+    private fun mapHttpException(exception: HttpException): Throwable {
+        if (exception.code() == 401) {
+            return IllegalArgumentException("Login ou senha inválidos")
+        }
+
+        val errorBodyString: String? = exception.response()?.errorBody()?.string()
+
+        val messageFromBody = errorBodyString?.let { body: String ->
+            try {
+                errorJson.decodeFromString(ErrorResponseDto.serializer(), body).message
+            } catch (e: Exception) {
+                null
+            }
+        }
+
+        return IllegalStateException(
+            messageFromBody ?: "Erro no servidor (${exception.code()})."
+        )
+    }
+
+    companion object {
+        private val errorJson = Json {
+            ignoreUnknownKeys = true
+        }
+    }
+}

@@ -1,10 +1,8 @@
 package com.senai.carteirinhadigital.feature.aluno.unidadescurriculares.data.repository
 
-
 import com.senai.carteirinhadigital.feature.aluno.unidadescurriculares.domain.model.UnidadeCurricular
 import com.senaisp.carteirinhadigital.feature.unidadecurriculares.data.remote.service.UnidadeCurricularApi
 import com.senaisp.carteirinhadigital.feature.unidadecurriculares.domain.repository.UnidadeCurricularRepository
-
 import java.io.IOException
 import retrofit2.HttpException
 
@@ -12,7 +10,7 @@ class ApiUnidadeCurricularRepositoryImpl(
     private val api: UnidadeCurricularApi
 ) : UnidadeCurricularRepository {
 
-    override suspend fun listarUnidadesCurriculares(): Result<List<UnidadeCurricular>> {
+    override suspend fun listar(): Result<List<UnidadeCurricular>> {
         return runCatching {
             api.listarUnidadesCurriculares().map {
                 it.toDomain()

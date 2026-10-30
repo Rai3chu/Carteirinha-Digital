@@ -78,7 +78,7 @@ fun AppShell(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Image(
-                        painter = painterResource(id = R.drawable.login),
+                        painter = painterResource(id = R.drawable.redbg),
                         contentDescription = "Avatar do usuário",
                         contentScale = ContentScale.Crop,
                         modifier = Modifier

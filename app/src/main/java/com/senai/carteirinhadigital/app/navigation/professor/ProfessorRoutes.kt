@@ -1,4 +1,4 @@
-package com.rafaelcosta.carteirinhadigital2devest.app.navigation.professor
+package com.senai.carteirinhadigital.app.navigation.professor
 
 object ProfessorRoutes {
     const val HOME = "professor/home"
