@@ -12,7 +12,6 @@ import androidx.navigation.navigation
 import com.senai.carteirinhadigital.app.navigation.GraphRoutes
 import com.senai.carteirinhadigital.app.navigation.ProfileGuard
 import com.senai.carteirinhadigital.app.ui.AppShell
-import com.senai.carteirinhadigital.feature.aluno.unidadescurriculares.presentation.screen.UnidadeCurricularScreen
 import com.senai.carteirinhadigital.feature.home.presentation.screen.HomeProfScreen
 import com.senai.carteirinhadigital.feature.login.domain.model.PerfilAcesso
 import com.senai.carteirinhadigital.feature.login.domain.model.UsuarioLogado
@@ -20,9 +19,10 @@ import com.senai.carteirinhadigital.feature.turmas.domain.repository.TurmaReposi
 import com.senai.carteirinhadigital.feature.turmas.presetation.TurmaViewModel
 import com.senai.carteirinhadigital.feature.turmas.presetation.factory.TurmaViewModelFactory
 import com.senai.carteirinhadigital.feature.turmas.presetation.screen.TurmasScreen
-import com.senaisp.carteirinhadigital.feature.unidadecurriculares.domain.repository.UnidadeCurricularRepository
-import com.senaisp.carteirinhadigital.feature.unidadecurriculares.presentation.UnidadeCurricularViewModel
-import com.senaisp.carteirinhadigital.feature.unidadecurriculares.presentation.factory.UnidadeCurricularViewModelFactory
+import com.senaisp.carteirinhadigital.feature.professor.unidadescurriculares.domain.repository.UnidadeCurricularRepository
+import com.senaisp.carteirinhadigital.feature.professor.unidadescurriculares.presentation.UnidadeCurricularViewModel
+import com.senaisp.carteirinhadigital.feature.professor.unidadescurriculares.presentation.factory.UnidadeCurricularViewModelFactory
+import com.senaisp.carteirinhadigital.feature.professor.unidadescurriculares.presentation.screen.UnidadeCurricularScreen
 import kotlinx.coroutines.flow.StateFlow
 
 fun NavGraphBuilder.professorNavGraph(
@@ -138,9 +138,6 @@ fun NavGraphBuilder.professorNavGraph(
                 ) { innerPadding ->
                     UnidadeCurricularScreen(
                         viewModel = unidadeCurricularViewModel,
-                        onBackClick = {
-                            navController.popBackStack()
-                        },
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(innerPadding)

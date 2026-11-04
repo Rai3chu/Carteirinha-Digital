@@ -4,16 +4,11 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -22,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -39,10 +35,15 @@ fun HomeProfScreen(
     onLogoutClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val isDark = MaterialTheme.colorScheme.background.luminance() < 0.5f
+
+    // Claro: elementos brancos e textos pretos | Escuro: o inverso
+    val elementColor = if (isDark) Color.Black else Color.White
+    val textColor = if (isDark) Color.White else Color.Black
+
     Box(
         modifier = modifier.fillMaxSize()
     ) {
-        // Imagem de Fundo
         Image(
             painter = painterResource(id = R.drawable.blackbg),
             contentDescription = "Fundo",
@@ -50,7 +51,6 @@ fun HomeProfScreen(
             contentScale = ContentScale.Crop
         )
 
-        // Conteúdo Centralizado
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -58,6 +58,7 @@ fun HomeProfScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
+            // O fundo é preto nos dois temas, então o título fica sempre branco
             Text(
                 text = "Olá, ${usuarioLogado.nome}",
                 color = Color.White,
@@ -70,7 +71,8 @@ fun HomeProfScreen(
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.95f)
+                    containerColor = elementColor,
+                    contentColor = textColor
                 )
             ) {
                 Column(
@@ -79,12 +81,20 @@ fun HomeProfScreen(
                 ) {
                     Text(
                         text = "Professor",
+                        color = textColor,
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold
                     )
 
-                    Text(text = "Matrícula: ${usuarioLogado.matricula}")
-                    Text(text = "Acesse suas turmas e unidades curriculares.")
+                    Text(
+                        text = "Matrícula: ${usuarioLogado.matricula}",
+                        color = textColor
+                    )
+
+                    Text(
+                        text = "Acesse suas turmas e unidades curriculares.",
+                        color = textColor
+                    )
                 }
             }
 
@@ -107,6 +117,5 @@ fun HomeProfScreen(
                 )
             }
         }
-
     }
 }

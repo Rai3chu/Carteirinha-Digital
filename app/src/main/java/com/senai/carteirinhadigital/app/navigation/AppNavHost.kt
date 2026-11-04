@@ -1,150 +1,128 @@
 package com.senai.carteirinhadigital.app.navigation
 
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.LocalActivity
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.composable
-import androidx.navigation.navigation
-import com.senai.carteirinhadigital.app.navigation.GraphRoutes
-import com.senai.carteirinhadigital.app.navigation.ProfileGuard
-import com.senai.carteirinhadigital.app.navigation.professor.ProfessorRoutes
-import com.senai.carteirinhadigital.app.ui.AppShell
-import com.senai.carteirinhadigital.feature.home.presentation.screen.HomeProfScreen
+import androidx.navigation.compose.NavHost
+import com.senai.carteirinhadigital.app.di.AppContainer
+import com.senai.carteirinhadigital.app.navigation.aluno.alunoNavGraph
+import com.senai.carteirinhadigital.app.navigation.auth.authNavGraph
+import com.senai.carteirinhadigital.app.navigation.professor.professorNavGraph
+import com.senai.carteirinhadigital.app.session.SessionViewModel
+import com.senai.carteirinhadigital.app.session.SessionViewModelFactory
 import com.senai.carteirinhadigital.feature.login.domain.model.PerfilAcesso
-import com.senai.carteirinhadigital.feature.login.domain.model.UsuarioLogado
-import com.senai.carteirinhadigital.feature.turmas.domain.repository.TurmaRepository
-import com.senai.carteirinhadigital.feature.turmas.presetation.TurmaViewModel
-import com.senai.carteirinhadigital.feature.turmas.presetation.factory.TurmaViewModelFactory
-import com.senai.carteirinhadigital.feature.turmas.presetation.screen.TurmasScreen
-import com.senaisp.carteirinhadigital.feature.professor.unidadescurriculares.domain.repository.UnidadeCurricularRepository
-import com.senaisp.carteirinhadigital.feature.professor.unidadescurriculares.presentation.UnidadeCurricularViewModel
-import com.senaisp.carteirinhadigital.feature.professor.unidadescurriculares.presentation.factory.UnidadeCurricularViewModelFactory
-import com.senaisp.carteirinhadigital.feature.professor.unidadescurriculares.presentation.screen.UnidadeCurricularScreen
-import kotlinx.coroutines.flow.StateFlow
 
-fun NavGraphBuilder.professorNavGraph(
+@Composable
+fun AppNavHost(
     navController: NavHostController,
-    usuarioLogadoFlow: StateFlow<UsuarioLogado?>,
-    turmaRepository: TurmaRepository,
-    unidadeCurricularRepository: UnidadeCurricularRepository,
     darkTheme: Boolean,
     onDarkThemeChange: (Boolean) -> Unit,
-    onLogout: () -> Unit,
-    onSessaoAusente: () -> Unit,
-    onPerfilInvalido: (PerfilAcesso) -> Unit
+    container: AppContainer
 ) {
-    navigation(startDestination = ProfessorRoutes.HOME, route = GraphRoutes.PROFESSOR) {
-        composable(route = ProfessorRoutes.HOME) {
-            ProfileGuard(
-                usuarioFlow = usuarioLogadoFlow,
-                perfilEsperado = PerfilAcesso.PROFESSOR,
-                onSessaoAusente = onSessaoAusente,
-                onPerfilInvalido = onPerfilInvalido
-            ) { usuario ->
-                AppShell(
-                    title = "Início",
-                    usuarioLogado = usuario,
-                    canNavigateBack = false,
-                    darkTheme = darkTheme,
-                    onDarkThemeChange = onDarkThemeChange,
-                    onNavigateBack = {},
-                    onLogout = onLogout
-                ) { innerPadding ->
-                    HomeProfScreen(
-                        usuarioLogado = usuario,
-                        onTurmasClick = {
-                            navController.navigate(ProfessorRoutes.TURMAS)
-                        },
-                        onUnidadesCurricularesClick = {
-                            navController.navigate(ProfessorRoutes.UNIDADES_CURRICULARES)
-                        },
-                        onLogoutClick = onLogout,
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(innerPadding)
-                    )
-                }
-            }
+
+    val sessionFactory = remember(container.sessionTokenStore) {
+        SessionViewModelFactory(
+            sessionTokenStore = container.sessionTokenStore
+        )
+    }
+
+    val activity = LocalActivity.current as ComponentActivity
+
+    val sessionViewModel: SessionViewModel = viewModel(
+        viewModelStoreOwner = activity,
+        factory = sessionFactory
+    )
+
+    fun graphFor(perfil: PerfilAcesso): String {
+        return when (perfil) {
+            PerfilAcesso.ALUNO -> GraphRoutes.ALUNO
+            PerfilAcesso.PROFESSOR -> GraphRoutes.PROFESSOR
         }
+    }
 
-        composable(route = ProfessorRoutes.TURMAS) {
-            ProfileGuard(
-                usuarioFlow = usuarioLogadoFlow,
-                perfilEsperado = PerfilAcesso.PROFESSOR,
-                onSessaoAusente = onSessaoAusente,
-                onPerfilInvalido = onPerfilInvalido
-            ) { usuario ->
-                val factory = remember(turmaRepository) {
-                    TurmaViewModelFactory(
-                        repository = turmaRepository
-                    )
-                }
+    fun replaceGraph(
+        currentGraph: String,
+        destinationGraph: String
+    ) {
+        navController.navigate(destinationGraph) {
+            popUpTo(currentGraph) {
+                inclusive = true
+            }
+            launchSingleTop = true
+        }
+    }
 
-                val turmaViewModel: TurmaViewModel = viewModel(
-                    factory = factory
+    NavHost(
+        navController = navController,
+        startDestination = GraphRoutes.AUTH
+    ) {
+        authNavGraph(
+            loginRepository = container.loginRepository,
+            onLoginSucesso = { usuario ->
+                sessionViewModel.setUsuarioLogado(usuario)
+                replaceGraph(
+                    currentGraph = GraphRoutes.AUTH,
+                    destinationGraph = graphFor(usuario.perfil)
                 )
-
-                AppShell(
-                    title = "Turmas",
-                    usuarioLogado = usuario,
-                    canNavigateBack = true,
-                    darkTheme = darkTheme,
-                    onDarkThemeChange = onDarkThemeChange,
-                    onNavigateBack = {
-                        navController.popBackStack()
-                    },
-                    onLogout = onLogout
-                ) { innerPadding ->
-                    TurmasScreen(
-                        viewModel = turmaViewModel,
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(innerPadding)
-                    )
-                }
             }
-        }
+        )
 
-        composable(route = ProfessorRoutes.UNIDADES_CURRICULARES) {
-            ProfileGuard(
-                usuarioFlow = usuarioLogadoFlow,
-                perfilEsperado = PerfilAcesso.PROFESSOR,
-                onSessaoAusente = onSessaoAusente,
-                onPerfilInvalido = onPerfilInvalido
-            ) { usuario ->
-                val factory = remember(unidadeCurricularRepository) {
-                    UnidadeCurricularViewModelFactory(
-                        repository = unidadeCurricularRepository
-                    )
-                }
-
-                val unidadeCurricularViewModel: UnidadeCurricularViewModel = viewModel(
-                    factory = factory
+        alunoNavGraph(
+            navController = navController,
+            usuarioLogadoFlow = sessionViewModel.usuarioLogado,
+            unidadeCurricularRepository = container.alunoUnidadeCurricularRepository,
+            darkTheme = darkTheme,
+            onDarkThemeChange = onDarkThemeChange,
+            onLogout = {
+                sessionViewModel.limparSessao()
+                replaceGraph(
+                    currentGraph = GraphRoutes.ALUNO,
+                    destinationGraph = GraphRoutes.AUTH
                 )
-
-                AppShell(
-                    title = "Unidades Curriculares",
-                    usuarioLogado = usuario,
-                    canNavigateBack = true,
-                    darkTheme = darkTheme,
-                    onDarkThemeChange = onDarkThemeChange,
-                    onNavigateBack = {
-                        navController.popBackStack()
-                    },
-                    onLogout = onLogout
-                ) { innerPadding ->
-                    UnidadeCurricularScreen(
-                        viewModel = unidadeCurricularViewModel,
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(innerPadding)
-                    )
-                }
+            },
+            onSessaoAusente = {
+                replaceGraph(
+                    currentGraph = GraphRoutes.ALUNO,
+                    destinationGraph = GraphRoutes.AUTH
+                )
+            },
+            onPerfilInvalido = { perfil ->
+                replaceGraph(
+                    currentGraph = GraphRoutes.ALUNO,
+                    destinationGraph = graphFor(perfil)
+                )
             }
-        }
+        )
+
+        professorNavGraph(
+            navController = navController,
+            usuarioLogadoFlow = sessionViewModel.usuarioLogado,
+            turmaRepository = container.turmaRepository,
+            unidadeCurricularRepository = container.professorUnidadeCurricularRepository,
+            darkTheme = darkTheme,
+            onDarkThemeChange = onDarkThemeChange,
+            onLogout = {
+                sessionViewModel.limparSessao()
+                replaceGraph(
+                    currentGraph = GraphRoutes.PROFESSOR,
+                    destinationGraph = GraphRoutes.AUTH
+                )
+            },
+            onSessaoAusente = {
+                replaceGraph(
+                    currentGraph = GraphRoutes.PROFESSOR,
+                    destinationGraph = GraphRoutes.AUTH
+                )
+            },
+            onPerfilInvalido = { perfil ->
+                replaceGraph(
+                    currentGraph = GraphRoutes.PROFESSOR,
+                    destinationGraph = graphFor(perfil)
+                )
+            }
+        )
     }
 }
