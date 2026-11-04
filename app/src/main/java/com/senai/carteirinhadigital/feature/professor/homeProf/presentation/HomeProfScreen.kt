@@ -108,25 +108,5 @@ fun HomeProfScreen(
             }
         }
 
-        // Botão de Logout
-        Button(
-            onClick = onLogoutClick,
-            modifier = Modifier
-                .align(Alignment.BottomStart)
-                .padding(bottom = 50.dp, start = 24.dp)
-                .size(56.dp),
-            shape = RoundedCornerShape(12.dp),
-            contentPadding = PaddingValues(0.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color.Transparent
-            )
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.deslogar),
-                contentDescription = "Botão de Logout",
-                modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.Fit
-            )
-        }
     }
 }

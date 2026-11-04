@@ -2,14 +2,24 @@ package com.senai.carteirinhadigital.app.di
 
 import android.content.Context
 import com.senai.carteirinhadigital.core.auth.SessionTokenStore
-import com.senai.carteirinhadigital.feature.aluno.unidadescurriculares.data.repository.ApiUnidadeCurricularRepositoryImpl
 import com.senai.carteirinhadigital.feature.login.data.repository.ApiLoginRepositoryImpl
+import com.senai.carteirinhadigital.feature.login.domain.repository.LoginRepository
+import com.senai.carteirinhadigital.feature.turmas.data.remote.TurmaApi
+import com.senai.carteirinhadigital.feature.turmas.data.repository.ApiTurmaRepositoryImpl
+import com.senai.carteirinhadigital.feature.turmas.domain.repository.TurmaRepository
 import com.senaisp.carteirinhadigital.core.network.NetworkClient
 import com.senaisp.carteirinhadigital.feature.login.data.remote.service.AuthApi
 import com.senaisp.carteirinhadigital.feature.login.data.repository.FakeAuthRepository
-import com.senai.carteirinhadigital.feature.login.domain.repository.LoginRepository
-import com.senaisp.carteirinhadigital.feature.unidadecurriculares.data.remote.service.UnidadeCurricularApi
-import com.senaisp.carteirinhadigital.feature.unidadecurriculares.domain.repository.UnidadeCurricularRepository
+
+// Imports do Aluno
+import com.senai.carteirinhadigital.feature.aluno.unidadescurriculares.data.repository.ApiUnidadeCurricularRepositoryImpl as AlunoRepositoryImpl
+import com.senaisp.carteirinhadigital.feature.unidadecurriculares.data.remote.service.UnidadeCurricularApi as AlunoUnidadeCurricularApi
+import com.senaisp.carteirinhadigital.feature.unidadecurriculares.domain.repository.UnidadeCurricularRepository as AlunoUnidadeCurricularRepository
+
+// Imports do Professor
+import com.senaisp.carteirinhadigital.feature.professor.unidadescurriculares.data.repository.ApiUnidadeCurricularRepositoryImpl as ProfessorRepositoryImpl
+import com.senaisp.carteirinhadigital.feature.professor.unidadescurriculares.data.remote.service.UnidadeCurricularApi as ProfessorUnidadeCurricularApi
+import com.senaisp.carteirinhadigital.feature.professor.unidadescurriculares.domain.repository.UnidadeCurricularRepository as ProfessorUnidadeCurricularRepository
 
 class DefaultAppContainer(
     private val context: Context
@@ -32,9 +42,21 @@ class DefaultAppContainer(
         )
     }
 
-    private val unidadeCurricularApi: UnidadeCurricularApi by lazy {
+    private val alunoUnidadeCurricularApi: AlunoUnidadeCurricularApi by lazy {
         networkClient.createAuthenticated(
-            serviceClass = UnidadeCurricularApi::class.java
+            serviceClass = AlunoUnidadeCurricularApi::class.java
+        )
+    }
+
+    private val professorUnidadeCurricularApi: ProfessorUnidadeCurricularApi by lazy {
+        networkClient.createAuthenticated(
+            serviceClass = ProfessorUnidadeCurricularApi::class.java
+        )
+    }
+
+    private val turmaApi: TurmaApi by lazy {
+        networkClient.createAuthenticated(
+            serviceClass = TurmaApi::class.java
         )
     }
 
@@ -48,9 +70,21 @@ class DefaultAppContainer(
         }
     }
 
-    override val unidadeCurricularRepository: UnidadeCurricularRepository by lazy {
-        ApiUnidadeCurricularRepositoryImpl(
-            api = unidadeCurricularApi
+    override val alunoUnidadeCurricularRepository: AlunoUnidadeCurricularRepository by lazy {
+        AlunoRepositoryImpl(
+            api = alunoUnidadeCurricularApi
+        )
+    }
+
+    override val professorUnidadeCurricularRepository: ProfessorUnidadeCurricularRepository by lazy {
+        ProfessorRepositoryImpl(
+            api = professorUnidadeCurricularApi
+        )
+    }
+
+    override val turmaRepository: TurmaRepository by lazy {
+        ApiTurmaRepositoryImpl(
+            api = turmaApi
         )
     }
 

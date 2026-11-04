@@ -2,20 +2,34 @@ package com.senai.carteirinhadigital.app.navigation.professor
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.senai.carteirinhadigital.app.navigation.GraphRoutes
 import com.senai.carteirinhadigital.app.navigation.ProfileGuard
 import com.senai.carteirinhadigital.app.ui.AppShell
+import com.senai.carteirinhadigital.feature.aluno.unidadescurriculares.presentation.screen.UnidadeCurricularScreen
 import com.senai.carteirinhadigital.feature.home.presentation.screen.HomeProfScreen
 import com.senai.carteirinhadigital.feature.login.domain.model.PerfilAcesso
 import com.senai.carteirinhadigital.feature.login.domain.model.UsuarioLogado
+import com.senai.carteirinhadigital.feature.turmas.domain.repository.TurmaRepository
+import com.senai.carteirinhadigital.feature.turmas.presetation.TurmaViewModel
+import com.senai.carteirinhadigital.feature.turmas.presetation.factory.TurmaViewModelFactory
+import com.senai.carteirinhadigital.feature.turmas.presetation.screen.TurmasScreen
+import com.senaisp.carteirinhadigital.feature.unidadecurriculares.domain.repository.UnidadeCurricularRepository
+import com.senaisp.carteirinhadigital.feature.unidadecurriculares.presentation.UnidadeCurricularViewModel
+import com.senaisp.carteirinhadigital.feature.unidadecurriculares.presentation.factory.UnidadeCurricularViewModelFactory
 import kotlinx.coroutines.flow.StateFlow
 
 fun NavGraphBuilder.professorNavGraph(
+    navController: NavHostController,
     usuarioLogadoFlow: StateFlow<UsuarioLogado?>,
+    turmaRepository: TurmaRepository,
+    unidadeCurricularRepository: UnidadeCurricularRepository,
     darkTheme: Boolean,
     onDarkThemeChange: (Boolean) -> Unit,
     onLogout: () -> Unit,
@@ -24,7 +38,6 @@ fun NavGraphBuilder.professorNavGraph(
 ) {
     navigation(startDestination = ProfessorRoutes.HOME, route = GraphRoutes.PROFESSOR) {
         composable(route = ProfessorRoutes.HOME) {
-            // O seu ProfileGuard original já espera o Flow diretamente
             ProfileGuard(
                 usuarioFlow = usuarioLogadoFlow,
                 perfilEsperado = PerfilAcesso.PROFESSOR,
@@ -41,11 +54,93 @@ fun NavGraphBuilder.professorNavGraph(
                     onLogout = onLogout
                 ) { innerPadding ->
                     HomeProfScreen(
-                        // Os parâmetros originais exigidos pela sua tela
                         usuarioLogado = usuario,
-                        onTurmasClick = {},
-                        onUnidadesCurricularesClick = {},
+                        onTurmasClick = {
+                            navController.navigate(ProfessorRoutes.TURMAS)
+                        },
+                        onUnidadesCurricularesClick = {
+                            navController.navigate(ProfessorRoutes.UNIDADES_CURRICULARES)
+                        },
                         onLogoutClick = onLogout,
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(innerPadding)
+                    )
+                }
+            }
+        }
+
+        composable(route = ProfessorRoutes.TURMAS) {
+            ProfileGuard(
+                usuarioFlow = usuarioLogadoFlow,
+                perfilEsperado = PerfilAcesso.PROFESSOR,
+                onSessaoAusente = onSessaoAusente,
+                onPerfilInvalido = onPerfilInvalido
+            ) { usuario ->
+                val factory = remember(turmaRepository) {
+                    TurmaViewModelFactory(
+                        repository = turmaRepository
+                    )
+                }
+
+                val turmaViewModel: TurmaViewModel = viewModel(
+                    factory = factory
+                )
+
+                AppShell(
+                    title = "Turmas",
+                    usuarioLogado = usuario,
+                    canNavigateBack = true,
+                    darkTheme = darkTheme,
+                    onDarkThemeChange = onDarkThemeChange,
+                    onNavigateBack = {
+                        navController.popBackStack()
+                    },
+                    onLogout = onLogout
+                ) { innerPadding ->
+                    TurmasScreen(
+                        viewModel = turmaViewModel,
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(innerPadding)
+                    )
+                }
+            }
+        }
+
+        composable(route = ProfessorRoutes.UNIDADES_CURRICULARES) {
+            ProfileGuard(
+                usuarioFlow = usuarioLogadoFlow,
+                perfilEsperado = PerfilAcesso.PROFESSOR,
+                onSessaoAusente = onSessaoAusente,
+                onPerfilInvalido = onPerfilInvalido
+            ) { usuario ->
+                val factory = remember(unidadeCurricularRepository) {
+                    UnidadeCurricularViewModelFactory(
+                        repository = unidadeCurricularRepository
+                    )
+                }
+
+                val unidadeCurricularViewModel: UnidadeCurricularViewModel = viewModel(
+                    factory = factory
+                )
+
+                AppShell(
+                    title = "Unidades Curriculares",
+                    usuarioLogado = usuario,
+                    canNavigateBack = true,
+                    darkTheme = darkTheme,
+                    onDarkThemeChange = onDarkThemeChange,
+                    onNavigateBack = {
+                        navController.popBackStack()
+                    },
+                    onLogout = onLogout
+                ) { innerPadding ->
+                    UnidadeCurricularScreen(
+                        viewModel = unidadeCurricularViewModel,
+                        onBackClick = {
+                            navController.popBackStack()
+                        },
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(innerPadding)

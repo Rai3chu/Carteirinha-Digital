@@ -108,11 +108,6 @@ fun HomeScreen(
                     modifier = Modifier.fillMaxWidth()
                 )
 
-                NavigationButton(
-                    text = "Sair",
-                    onClick = onSairClick,
-                    modifier = Modifier.fillMaxWidth()
-                )
             }
         }
     }

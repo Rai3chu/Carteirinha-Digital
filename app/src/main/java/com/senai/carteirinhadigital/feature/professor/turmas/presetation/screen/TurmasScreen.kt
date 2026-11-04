@@ -38,7 +38,6 @@ import com.senai.carteirinhadigital.feature.turmas.presetation.components.Turmas
 @Composable
 fun TurmasScreen(
     viewModel: TurmaViewModel,
-    navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
     val uiState by viewModel.uiState.collectAsState()
