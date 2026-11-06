@@ -28,10 +28,13 @@ private val lightScheme = lightColorScheme(
     onError = onErrorLight,
     errorContainer = errorContainerLight,
     onErrorContainer = onErrorContainerLight,
-    background = backgroundLight,
-    onBackground = onBackgroundLight,
-    surface = surfaceLight,
-    onSurface = onSurfaceLight,
+
+    // ALTERADO: Fundo branco e texto preto
+    background = Color.White,
+    onBackground = Color.Black,
+    surface = Color.White,
+    onSurface = Color.Black,
+
     surfaceVariant = surfaceVariantLight,
     onSurfaceVariant = onSurfaceVariantLight,
     outline = outlineLight,
@@ -69,10 +72,13 @@ private val darkScheme = darkColorScheme(
     onError = onErrorDark,
     errorContainer = errorContainerDark,
     onErrorContainer = onErrorContainerDark,
-    background = backgroundDark,
-    onBackground = onBackgroundDark,
-    surface = surfaceDark,
-    onSurface = onSurfaceDark,
+
+    // ALTERADO: Fundo escuro e texto branco (Inverso)
+    background = Color(0xFF121212),
+    onBackground = Color.White,
+    surface = Color(0xFF1E1E1E), // Um pouco mais claro que o fundo para destacar cartões
+    onSurface = Color.White,
+
     surfaceVariant = surfaceVariantDark,
     onSurfaceVariant = onSurfaceVariantDark,
     outline = outlineDark,
@@ -110,8 +116,6 @@ fun CarteirinhaDigitalTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
-    // Força o app a usar estritamente o seu esquema amarelo/preto,
-    // removendo o dynamicLight/DarkColorScheme do Android
     val colorScheme = when {
         darkTheme -> darkScheme
         else -> lightScheme

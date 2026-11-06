@@ -53,7 +53,7 @@ fun UnidadeCurricularScreen(
     Box(
         modifier = modifier.fillMaxSize()
     ) {
-        // Imagem de Fundo constante para todos os estados
+
         Image(
             painter = painterResource(id = R.drawable.redbg),
             contentDescription = "Fundo da Tela",
@@ -61,7 +61,7 @@ fun UnidadeCurricularScreen(
             contentScale = ContentScale.Crop
         )
 
-        // Controlo de Estados da UI com a nova estrutura 'when'
+
         when {
             uiState.isLoading -> {
                 Box(
@@ -121,7 +121,7 @@ fun UnidadeCurricularScreen(
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     items(
-                        items = uiState.unidades as List<UnidadeCurricular>, // Força a lista a ser reconhecida
+                        items = uiState.unidades as List<UnidadeCurricular>,
                         key = { it.id }
                     ) { unidadeCurricular ->
                         UnidadeCurricularCard(
@@ -132,30 +132,5 @@ fun UnidadeCurricularScreen(
             }
         }
 
-        // Botão Fixo de Voltar sobreposto ao conteúdo
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(headerHeight)
-                .padding(horizontal = 20.dp, vertical = 16.dp),
-            contentAlignment = Alignment.CenterStart
-        ) {
-            Button(
-                onClick = onBackClick,
-                modifier = Modifier.size(56.dp),
-                shape = RoundedCornerShape(12.dp),
-                contentPadding = PaddingValues(0.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.Transparent
-                )
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.voltar),
-                    contentDescription = "Voltar",
-                    modifier = Modifier.fillMaxSize(),
-                    contentScale = ContentScale.Fit
-                )
-            }
-        }
     }
 }

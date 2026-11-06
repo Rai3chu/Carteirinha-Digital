@@ -1,5 +1,6 @@
 package com.senaisp.carteirinhadigital.feature.professor.unidadescurriculares.presentation.screen
 
+import androidx.compose.foundation.Image // Importe a Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,10 +17,15 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale // Importe o ContentScale
+import androidx.compose.ui.res.painterResource // Importe o painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.senaisp.carteirinhadigital.R
 import com.senaisp.carteirinhadigital.feature.professor.unidadescurriculares.presentation.UnidadeCurricularViewModel
 import com.senaisp.carteirinhadigital.feature.professor.unidadescurriculares.presentation.component.UnidadeCurricularCard
+// Substitua por com.senaisp.carteirinhadigital.R ou o pacote base do seu app onde o R está
+// import com.senai.carteirinhadigital.R
 
 @Composable
 fun UnidadeCurricularScreen(
@@ -34,65 +40,79 @@ fun UnidadeCurricularScreen(
         viewModel.carregar()
     }
 
-    when {
-        uiState.isLoading -> {
-            Box(
-                modifier = modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                CircularProgressIndicator()
-            }
-        }
 
-        errorMessage != null -> {
-            Column(
-                modifier = modifier
-                    .fillMaxSize()
-                    .padding(24.dp),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    text = errorMessage,
-                    color = MaterialTheme.colorScheme.error
-                )
-                Button(
-                    modifier = Modifier.padding(top = 16.dp),
-                    onClick = {
-                        viewModel.carregar()
-                    }
+    Box(modifier = modifier.fillMaxSize()) {
+
+
+        Image(
+            // TODO: Troque R.drawable.sua_imagem_de_fundo pelo nome da sua imagem na pasta res/drawable
+            painter = painterResource(id = R.drawable.blackbg),
+            contentDescription = null,
+            contentScale = ContentScale.Crop, // Preenche a tela inteira
+            modifier = Modifier.fillMaxSize()
+        )
+
+
+        when {
+            uiState.isLoading -> {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
                 ) {
-                    Text("Tentar novamente")
+                    CircularProgressIndicator()
                 }
             }
-        }
 
-        uiState.unidades.isEmpty() -> {
-            Box(
-                modifier = modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                Text("Nenhuma unidade curricular encontrada.")
-            }
-        }
-
-        else -> {
-            LazyColumn(
-                modifier = modifier
-                    .fillMaxSize()
-                    .padding(
-                        horizontal = 16.dp,
-                        vertical = 12.dp
-                    ),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                items(
-                    items = uiState.unidades,
-                    key = { it.id }
-                ) { unidadeCurricular ->
-                    UnidadeCurricularCard(
-                        unidadeCurricular = unidadeCurricular
+            errorMessage != null -> {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(24.dp),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = errorMessage,
+                        color = MaterialTheme.colorScheme.error
                     )
+                    Button(
+                        modifier = Modifier.padding(top = 16.dp),
+                        onClick = {
+                            viewModel.carregar()
+                        }
+                    ) {
+                        Text("Tentar novamente")
+                    }
+                }
+            }
+
+            uiState.unidades.isEmpty() -> {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text("Nenhuma unidade curricular encontrada.")
+                }
+            }
+
+            else -> {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(
+                            horizontal = 16.dp,
+                            vertical = 12.dp
+                        ),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    items(
+                        items = uiState.unidades,
+                        key = { it.id }
+                    ) { unidadeCurricular ->
+                        UnidadeCurricularCard(
+                            unidadeCurricular = unidadeCurricular
+                        )
+                    }
                 }
             }
         }

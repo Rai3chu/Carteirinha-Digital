@@ -2,88 +2,93 @@ package com.senai.carteirinhadigital.core.desingsystem.theme
 
 import androidx.compose.ui.graphics.Color
 
-// Suas duas cores base obrigatórias
-val amareloForte = Color(0xFFFCD403)
+// Cores base (sem o amarelo)
 val pretoPuro = Color(0xFF000000)
+val branco = Color(0xFFFFFFFF)
+val cinzaEscuroFundo = Color(0xFF121212)
+val cinzaEscuroSuperficie = Color(0xFF1E1E1E)
+val cinzaClaro = Color(0xFFF0F0F0)
 
 // ==========================================
 // PALETA MODO CLARO (LIGHT SCHEME)
-// Fundo Amarelo Forte com textos e componentes em Preto Puro
+// Fundo Branco, Botões Pretos, Textos Pretos
 // ==========================================
-val primaryLight = pretoPuro                 // Botão preenchido em Preto
-val onPrimaryLight = amareloForte             // Texto de dentro do botão em Amarelo
-val primaryContainerLight = pretoPuro
-val onPrimaryContainerLight = amareloForte
+val primaryLight = pretoPuro                  // Botões preenchidos a Preto
+val onPrimaryLight = branco                   // Texto dentro dos botões a Branco
+val primaryContainerLight = cinzaClaro
+val onPrimaryContainerLight = pretoPuro
 val secondaryLight = pretoPuro
-val onSecondaryLight = amareloForte
-val secondaryContainerLight = pretoPuro
-val onSecondaryContainerLight = amareloForte
+val onSecondaryLight = branco
+val secondaryContainerLight = cinzaClaro
+val onSecondaryContainerLight = pretoPuro
 val tertiaryLight = pretoPuro
-val onTertiaryLight = amareloForte
-val tertiaryContainerLight = pretoPuro
-val onTertiaryContainerLight = amareloForte
+val onTertiaryLight = branco
+val tertiaryContainerLight = cinzaClaro
+val onTertiaryContainerLight = pretoPuro
 val errorLight = Color(0xFFBA1A1A)
 val onErrorLight = Color(0xFFFFFFFF)
 val errorContainerLight = Color(0xFFFFDAD6)
 val onErrorContainerLight = Color(0xFF93000A)
 
-val backgroundLight = amareloForte            // FUNDO DA TELA AGORA É AMARELO
-val surfaceLight = amareloForte               // FUNDO DOS COMPONENTES AGORA É AMARELO
-val onBackgroundLight = pretoPuro             // TEXTOS GERAIS AGORA SÃO PRETOS
-val onSurfaceLight = pretoPuro                // TEXTOS DOS INPUTS AGORA SÃO PRETOS
-val surfaceVariantLight = amareloForte
+val backgroundLight = branco                  // Fundo do ecrã a Branco
+val surfaceLight = branco                     // Fundo dos cartões a Branco
+val onBackgroundLight = pretoPuro             // Textos gerais a Preto
+val onSurfaceLight = pretoPuro                // Textos dos cartões a Preto
+val surfaceVariantLight = cinzaClaro
 val onSurfaceVariantLight = pretoPuro
-val outlineLight = pretoPuro                  // BORDAS DOS INPUTS AGORA SÃO PRETAS
-val outlineVariantLight = pretoPuro
+val outlineLight = Color(0xFF757575)
+val outlineVariantLight = Color(0xFFBDBDBD)
 
 val scrimLight = pretoPuro
 val inverseSurfaceLight = pretoPuro
-val inverseOnSurfaceLight = amareloForte
-val inversePrimaryLight = amareloForte
-val surfaceDimLight = amareloForte
-val surfaceBrightLight = amareloForte
-val surfaceContainerLowestLight = amareloForte
-val surfaceContainerLowLight = amareloForte
-val surfaceContainerLight = amareloForte
-val surfaceContainerHighLight = amareloForte
-val surfaceContainerHighestLight = amareloForte
+val inverseOnSurfaceLight = branco
+val inversePrimaryLight = branco
+val surfaceDimLight = branco
+val surfaceBrightLight = branco
+val surfaceContainerLowestLight = branco
+val surfaceContainerLowLight = branco
+val surfaceContainerLight = branco
+val surfaceContainerHighLight = branco
+val surfaceContainerHighestLight = branco
 
 // ==========================================
 // PALETA MODO ESCURO (DARK SCHEME)
-// Deixado igual para manter o comportamento independente do sistema
+// Fundo Escuro, Botões Brancos, Textos Brancos
 // ==========================================
-val primaryDark = pretoPuro
-val onPrimaryDark = amareloForte
-val primaryContainerDark = pretoPuro
-val onPrimaryContainerDark = amareloForte
-val secondaryDark = pretoPuro
-val onSecondaryDark = amareloForte
-val secondaryContainerDark = pretoPuro
-val onSecondaryContainerDark = amareloForte
-val tertiaryDark = pretoPuro
-val onTertiaryDark = amareloForte
-val tertiaryContainerDark = pretoPuro
-val onTertiaryContainerDark = amareloForte
+val primaryDark = branco                      // Botões preenchidos a Branco
+val onPrimaryDark = pretoPuro                 // Texto dentro dos botões a Preto
+val primaryContainerDark = cinzaEscuroSuperficie
+val onPrimaryContainerDark = branco
+val secondaryDark = branco
+val onSecondaryDark = pretoPuro
+val secondaryContainerDark = cinzaEscuroSuperficie
+val onSecondaryContainerDark = branco
+val tertiaryDark = branco
+val onTertiaryDark = pretoPuro
+val tertiaryContainerDark = cinzaEscuroSuperficie
+val onTertiaryContainerDark = branco
 val errorDark = Color(0xFFFFB4AB)
 val onErrorDark = Color(0xFF690005)
 val errorContainerDark = Color(0xFF93000A)
 val onErrorContainerDark = Color(0xFFFFDAD6)
-val backgroundDark = amareloForte
-val onBackgroundDark = pretoPuro
-val surfaceDark = amareloForte
-val onSurfaceDark = pretoPuro
-val surfaceVariantDark = amareloForte
-val onSurfaceVariantDark = pretoPuro
-val outlineDark = pretoPuro
-val outlineVariantDark = pretoPuro
+
+val backgroundDark = cinzaEscuroFundo         // Fundo do ecrã Escuro
+val onBackgroundDark = branco                 // Textos gerais a Branco
+val surfaceDark = cinzaEscuroSuperficie       // Fundo dos cartões Escuro
+val onSurfaceDark = branco                    // Textos dos cartões a Branco
+val surfaceVariantDark = Color(0xFF2C2C2C)
+val onSurfaceVariantDark = branco
+val outlineDark = Color(0xFFA0A0A0)
+val outlineVariantDark = Color(0xFF424242)
+
 val scrimDark = pretoPuro
-val inverseSurfaceDark = pretoPuro
-val inverseOnSurfaceDark = amareloForte
-val inversePrimaryDark = amareloForte
-val surfaceDimDark = amareloForte
-val surfaceBrightDark = amareloForte
-val surfaceContainerLowestDark = amareloForte
-val surfaceContainerLowDark = amareloForte
-val surfaceContainerDark = amareloForte
-val surfaceContainerHighDark = amareloForte
-val surfaceContainerHighestDark = amareloForte
+val inverseSurfaceDark = branco
+val inverseOnSurfaceDark = pretoPuro
+val inversePrimaryDark = pretoPuro
+val surfaceDimDark = cinzaEscuroFundo
+val surfaceBrightDark = cinzaEscuroFundo
+val surfaceContainerLowestDark = cinzaEscuroFundo
+val surfaceContainerLowDark = cinzaEscuroFundo
+val surfaceContainerDark = cinzaEscuroFundo
+val surfaceContainerHighDark = cinzaEscuroFundo
+val surfaceContainerHighestDark = cinzaEscuroFundo

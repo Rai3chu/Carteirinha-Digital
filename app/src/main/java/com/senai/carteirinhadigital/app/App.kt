@@ -12,7 +12,8 @@ fun App(
     darkTheme: Boolean,
     onDarkThemeChange: (Boolean) -> Unit
 ) {
-    CarteirinhaDigitalTheme {
+
+    CarteirinhaDigitalTheme(darkTheme = darkTheme) {
         val navController = rememberNavController()
 
         AppNavHost(

@@ -17,7 +17,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -35,15 +34,10 @@ fun HomeProfScreen(
     onLogoutClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val isDark = MaterialTheme.colorScheme.background.luminance() < 0.5f
-
-    // Claro: elementos brancos e textos pretos | Escuro: o inverso
-    val elementColor = if (isDark) Color.Black else Color.White
-    val textColor = if (isDark) Color.White else Color.Black
-
     Box(
         modifier = modifier.fillMaxSize()
     ) {
+        // Imagem de fundo preta
         Image(
             painter = painterResource(id = R.drawable.blackbg),
             contentDescription = "Fundo",
@@ -58,7 +52,7 @@ fun HomeProfScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            // O fundo é preto nos dois temas, então o título fica sempre branco
+
             Text(
                 text = "Olá, ${usuarioLogado.nome}",
                 color = Color.White,
@@ -71,8 +65,9 @@ fun HomeProfScreen(
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 colors = CardDefaults.cardColors(
-                    containerColor = elementColor,
-                    contentColor = textColor
+
+                    containerColor = MaterialTheme.colorScheme.surface,
+                    contentColor = MaterialTheme.colorScheme.onSurface
                 )
             ) {
                 Column(
@@ -81,19 +76,16 @@ fun HomeProfScreen(
                 ) {
                     Text(
                         text = "Professor",
-                        color = textColor,
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold
                     )
 
                     Text(
-                        text = "Matrícula: ${usuarioLogado.matricula}",
-                        color = textColor
+                        text = "Matrícula: ${usuarioLogado.matricula}"
                     )
 
                     Text(
-                        text = "Acesse suas turmas e unidades curriculares.",
-                        color = textColor
+                        text = "Acesse suas turmas e unidades curriculares."
                     )
                 }
             }

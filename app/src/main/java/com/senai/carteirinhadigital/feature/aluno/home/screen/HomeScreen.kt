@@ -17,7 +17,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -36,15 +35,10 @@ fun HomeScreen(
     onSairClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-
-    val isDark = MaterialTheme.colorScheme.background.luminance() < 0.5f
-
-    val elementColor = if (isDark) Color.Black else Color.White
-    val textColor = if (isDark) Color.White else Color.Black
-
     Box(
         modifier = modifier.fillMaxSize()
     ) {
+
         Image(
             painter = painterResource(id = R.drawable.redbg),
             contentDescription = "Fundo",
@@ -59,9 +53,10 @@ fun HomeScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
+
             Text(
                 text = "Olá, ${usuarioLogado.nome}",
-                color = textColor,
+                color = Color.White,
                 fontFamily = Montserrat,
                 fontSize = 32.sp,
                 fontWeight = FontWeight.Bold
@@ -72,8 +67,9 @@ fun HomeScreen(
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 colors = CardDefaults.cardColors(
-                    containerColor = elementColor,
-                    contentColor = textColor
+
+                    containerColor = MaterialTheme.colorScheme.surface,
+                    contentColor = MaterialTheme.colorScheme.onSurface
                 )
             ) {
                 Column(
@@ -82,19 +78,16 @@ fun HomeScreen(
                 ) {
                     Text(
                         text = usuarioLogado.curso,
-                        color = textColor,
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold
                     )
 
                     Text(
-                        text = "Turma: ${usuarioLogado.turma}",
-                        color = textColor
+                        text = "Turma: ${usuarioLogado.turma}"
                     )
 
                     Text(
-                        text = "Matrícula: ${usuarioLogado.matricula}",
-                        color = textColor
+                        text = "Matrícula: ${usuarioLogado.matricula}"
                     )
                 }
             }
@@ -105,6 +98,7 @@ fun HomeScreen(
                 modifier = Modifier.fillMaxWidth(),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
+
                 NavigationButton(
                     text = "Carteirinha",
                     onClick = onCarteirinhaClick,
